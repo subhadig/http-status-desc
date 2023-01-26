@@ -23,13 +23,22 @@
 # SOFTWARE.
 
 import requests
+import xml.etree.ElementTree as ET
 
-def _fetch_page_html_for_code(code: int) -> str:
-    url = f"https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/{code}"
+def _fetch_page(url: str) -> str:
     return requests.request('GET', url).text
 
+def _get_desc_for_code(code: int):
+    url = f"https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/{code}"
+    page = _fetch_page(url)
+    print(page)
+    exit(0)
+    #page_root = ET.fromstring(page)
+    page_root = ET.parse('/tmp/page.html')
+    print(page_root.findtext('/html/body/div/div/div[2]/main/article/h1'))
+
 def main():
-    print(_fetch_page_html_for_code(200))
+    print(_get_desc_for_code(200))
 
 if __name__=='__main__':
     main()
